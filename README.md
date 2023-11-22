@@ -1,2 +1,2 @@
-# noetics
-Noetics
+# Polaris
+Polaris
