@@ -23,7 +23,7 @@ class SaleOrderLine(models.Model):
             "res_id": (lines and len(lines) == 1) and lines.id or False,
         }
 
-    def _generate_api_key(self):
+    def _generate_api_key(self,transaction_id,customer_id):
         '''
         This method is used to generate a new api key for the Subscription Product
         purchased, therefore once the invoice is generated successfully the
@@ -39,7 +39,9 @@ class SaleOrderLine(models.Model):
             'order_line_id' : self.id,
             'product_id': self.product_id.id,
             'api_key' : self.api_key,
-            'status' : 'start'
+            'status' : 'start',
+            'transaction_id' : transaction_id.id,
+            'customer_id': customer_id.id
         }
         print("sale history key: ",vals,'\n')
         sale_order_line_api_key_obj.create(vals)

@@ -12,7 +12,7 @@ class PaymentTransaction(models.Model):
         '''Overwrite the whole  method as there is a for loop developed inside the
            function.
            '''
-        print("\n\nCustom Custom _send_invoice method is called from sale -> models -> payment_transaction.py\n\n")
+        print("\n\nCustom _send_invoice method is called from sale -> models -> payment_transaction.py\n\n")
         template_id = self.env['ir.config_parameter'].sudo().get_param(
             'sale.default_invoice_email_template'
         )
@@ -34,15 +34,27 @@ class PaymentTransaction(models.Model):
                 for sale in sale_ids:
                     print("\nSALE: ",sale,'\n')
                     order_lines = sale.order_line
-                    for line in order_lines:
-                        '''To store the generated api key inside the particular
-                        sale order line
-                        '''
-                        print("Sale order line: ",line,'\n')
-                        line._generate_api_key()
+                    subscription_products = order_lines.filtered(lambda line: line.product_template_id.recurring_invoice)
+                    print("Subscription product present: ",subscription_products,'\n')
+                    template_id = self.env.ref("polaris_product_subscription.email_template_edi_invoice_for_subscription_product").id
+                    if subscription_products:
+                        for line in subscription_products:
+                                '''To store the generated api key inside the particular
+                                sale order line with subscription product
+                                '''
+                                line._generate_api_key(tx, tx.partner_id)
 
-                lang = template._render_lang(invoice.ids)[invoice.id]
-                model_desc = invoice.with_context(lang=lang).type_name
+                        print("\nApi generated and stored in every required place!!!\n")
+                        lang = template._render_lang(invoice.ids)[invoice.id]
+                        model_desc = invoice.with_context(lang=lang).type_name
+
+                        invoice.with_context(model_description=model_desc).with_user(
+                            SUPERUSER_ID
+                        ).message_post_with_template(
+                            template_id=template_id,
+                            email_layout_xmlid='mail.mail_notification_layout_with_responsible_signature',
+                        )
+
                 invoice.with_context(model_description=model_desc).with_user(
                     SUPERUSER_ID
                 ).message_post_with_template(

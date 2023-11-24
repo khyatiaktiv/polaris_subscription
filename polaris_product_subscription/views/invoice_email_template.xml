@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--Inheriting email_template_edi_invoice to add the details for Susbscribed Product in Tabular Format-->
+    <data noupdate="1">
+        <!--Email template -->
+        <record id="email_template_edi_invoice_for_subscription_product" model="mail.template">
+            <field name="name">Invoice for Subscription</field>
+            <field name="model_id" ref="account.model_account_move"/>
+            <field name="email_from">{{ (object.invoice_user_id.email_formatted or object.company_id.email_formatted or user.email_formatted) }}</field>
+            <field name="partner_to">{{ object.partner_id.id }}</field>
+            <field name="subject">{{ object.company_id.name }} Invoice (Ref {{ object.name or 'n/a' }})</field>
+            <field name="description">Sent to customers with their invoices in attachment</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        Dear
+                        <t t-if="object.partner_id.parent_id">
+                            <t t-out="object.partner_id.name or ''">Brandon Freeman</t> (<t t-out="object.partner_id.parent_id.name or ''">Azure Interior</t>),
+                        </t>
+                        <t t-else="">
+                            <t t-out="object.partner_id.name or ''">Brandon Freeman</t>,
+                        </t>
+                        <br /><br />
+                        Here is your
+                        <t t-if="object.name">
+                            invoice <span style="font-weight:bold;" t-out="object.name or ''">INV/2021/05/0005</span>
+                        </t>
+                        <t t-else="">
+                            invoice
+                        </t>
+                        <t t-if="object.invoice_origin">
+                            (with reference: <t t-out="object.invoice_origin or ''">SUB003</t>)
+                        </t>
+                        amounting in <span style="font-weight:bold;" t-out="format_amount(object.amount_total, object.currency_id) or ''">$ 143,750.00</span>
+                        from <t t-out="object.company_id.name or ''">YourCompany</t>.
+                        <t t-if="object.payment_state in ('paid', 'in_payment')">
+                            This invoice is already paid.
+                        </t>
+                        <t t-else="">
+                            Please remit payment at your earliest convenience.
+                            <t t-if="object.payment_reference">
+                                <br /><br />
+                                Please use the following communication for your payment: <span style="font-weight:bold;" t-out="object.payment_reference or ''">INV/2021/05/0005</span>.
+                            </t>
+                        </t>
+
+                        <!--start of order details tabular format-->
+                        <!-- <t t-if="hasattr(object, 'website_id') and object.website_id"> -->
+                            <t style="margin: 0px; padding: 0px;">
+                                <table width="100%" style="color: #454748; font-size: 12px; border-collapse: collapse;">
+                                    <tr style="border-bottom: 2px solid #dee2e6;">
+                                        <td style="width: 150px;"><span style="font-weight:bold;">Products</span></td>
+                                        <td></td>
+                                        <td width="15%" align="center"><span style="font-weight:bold;">Quantity</span></td>
+                                        <td></td>
+                                        <td width="15%" align="center"><span style="font-weight:bold;">API Details</span></td>
+                                        <td></td>
+                                        <td width="15%" align="center"><span style="font-weight:bold;">Document Link</span></td>
+                                        <td></td>
+                                    </tr>
+                                </table>
+                            </t>
+                            <span t-out="object.transaction_ids"/>
+                            <!-- <t t-set="sale_ids" t-value="object.transaction_ids.sale_order_ids.order_line.filtered(lambda tx: tx.product_template_id.recurring_invoice"/>
+                            <span t-out='sale_ids'/> -->
+                            <!-- <table class="table table-borderless m-0">
+                                <tbody>
+                                    <tr t-foreach="sale_ids" t-as="line" class="pb-2">
+                                        <td class="ps-0 pe-0">
+                                            <table class="table">
+                                                <tr>
+                                                    <td class="p-0 w-25">
+                                                        <span class="d-block fw-bold" t-field="line.product_template_id.name"/>
+                                                    </td>
+                                                    <td></td>
+                                                    <td class="p-0 w-25">
+                                                        <span class="d-block fw-bold" t-field="line.product_uom_qty"/>
+                                                    </td>
+                                                    <td></td>
+                                                    <td class="p-0 w-25">
+                                                        <span class="d-block fw-bold" t-field="line.api_key"/>
+                                                    </td>
+                                                    <td></td>
+                                                    <td class="p-0 w-25">
+                                                        Technical Name: <span class="d-block fw-bold" t-field="line.product_template_id.technical_name"/><br></br>
+                                                        Information: <span class="d-block fw-bold" t-field="line.product_template_id.document_link"/><br></br>
+                                                        Clone URL: <span class="d-block fw-bold" t-field="line.product_template_id.clone_url"/><br></br>
+                                                    </td>
+                                                    <td></td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table> -->
+                        <!-- </t> -->
+                        <!--end of order details in tabular format-->
+                        <br /><br />
+                        <t t-if="not is_html_empty(object.invoice_user_id.signature)">
+                            <br /><br />
+                            <t t-out="object.invoice_user_id.signature or ''">--<br/>Mitchell Admin</t>
+                        </t>
+                    </p>
+                </div>
+            </field>
+            <field name="report_template" ref="account.account_invoices"/>
+            <field name="report_name">Invoice_{{ (object.name or '').replace('/','_') }}{{ object.state == 'draft' and '_draft' or '' }}</field>
+            <field name="lang">{{ object.partner_id.lang }}</field>
+            <field name="auto_delete" eval="True"/>
+        </record>
+    </data>
+</odoo>
