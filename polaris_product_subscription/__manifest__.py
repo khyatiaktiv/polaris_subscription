@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 {
-    "name": "Polaris | Product Subscription",
+    "name": "Polaris || Product Subscription",
     "summary": """Product Subscription""",
     "description": """
     Product Subscription with API key
@@ -11,11 +11,13 @@
     "category": "Sale/Sale",
     "license": "LGPL-3",
     "version": "16.0.1.0.0",
-    "depends": ["sale_subscription"],
+    "depends": ["sale_subscription","account"],
     "data": [
         "security/ir.model.access.csv",
         "views/sale_order_views.xml",
         "views/product_views.xml",
+        "views/sale_order_api_key_history.xml",
+        "views/invoice_email_template.xml"
     ],
     "application": True,
     "auto_install": False,

@@ -13,13 +13,13 @@ class PaymentTransaction(models.Model):
            function.
            '''
         print("\n\nCustom _send_invoice method is called from sale -> models -> payment_transaction.py\n\n")
-        template_id = self.env['ir.config_parameter'].sudo().get_param(
-            'sale.default_invoice_email_template'
-        )
-        if not template_id:
-            return
-        template_id = int(template_id)
-        template = self.env['mail.template'].browse(template_id)
+        # template_id = self.env['ir.config_parameter'].sudo().get_param(
+        #     'sale.default_invoice_email_template'
+        # )
+        # if not template_id:
+        #     return
+        # template_id = int(template_id)
+        # template = self.env['mail.template'].browse(template_id)
         for tx in self:
             tx = tx.with_company(tx.company_id).with_context(
                 company_id=tx.company_id.id,
@@ -33,10 +33,13 @@ class PaymentTransaction(models.Model):
                 sale_ids = tx.sale_order_ids
                 for sale in sale_ids:
                     print("\nSALE: ",sale,'\n')
+                    # print("\template_id: ",template_id,'\n')
                     order_lines = sale.order_line
                     subscription_products = order_lines.filtered(lambda line: line.product_template_id.recurring_invoice)
                     print("Subscription product present: ",subscription_products,'\n')
                     template_id = self.env.ref("polaris_product_subscription.email_template_edi_invoice_for_subscription_product").id
+                    template_id = int(template_id)
+                    template = self.env['mail.template'].browse(template_id)
                     if subscription_products:
                         for line in subscription_products:
                                 '''To store the generated api key inside the particular
@@ -45,19 +48,20 @@ class PaymentTransaction(models.Model):
                                 line._generate_api_key(tx, tx.partner_id)
 
                         print("\nApi generated and stored in every required place!!!\n")
+                        
                         lang = template._render_lang(invoice.ids)[invoice.id]
                         model_desc = invoice.with_context(lang=lang).type_name
-
-                        invoice.with_context(model_description=model_desc).with_user(
-                            SUPERUSER_ID
-                        ).message_post_with_template(
-                            template_id=template_id,
-                            email_layout_xmlid='mail.mail_notification_layout_with_responsible_signature',
-                        )
-
+                print("\n\n\nxxxxxxxxx: ",template_id,'\n')
                 invoice.with_context(model_description=model_desc).with_user(
                     SUPERUSER_ID
                 ).message_post_with_template(
                     template_id=template_id,
                     email_layout_xmlid='mail.mail_notification_layout_with_responsible_signature',
                 )
+
+                # invoice.with_context(model_description=model_desc).with_user(
+                #     SUPERUSER_ID
+                # ).message_post_with_template(
+                #     template_id=template_id,
+                #     email_layout_xmlid='mail.mail_notification_layout_with_responsible_signature',
+                # )

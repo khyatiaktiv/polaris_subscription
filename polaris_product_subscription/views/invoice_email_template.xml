@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <!--Inheriting email_template_edi_invoice to add the details for Susbscribed Product in Tabular Format-->
-    <data noupdate="1">
+    <data>
         <!--Email template -->
         <record id="email_template_edi_invoice_for_subscription_product" model="mail.template">
             <field name="name">Invoice for Subscription</field>
@@ -60,10 +60,10 @@
                                     </tr>
                                 </table>
                             </t>
-                            <span t-out="object.transaction_ids"/>
-                            <!-- <t t-set="sale_ids" t-value="object.transaction_ids.sale_order_ids.order_line.filtered(lambda tx: tx.product_template_id.recurring_invoice"/>
-                            <span t-out='sale_ids'/> -->
-                            <!-- <table class="table table-borderless m-0">
+                            <!-- <span t-out="object.transaction_ids.sale_order_ids.order_line.filtered(lambda tx: tx.product_template_id.recurring_invoice)"/> -->
+                            <t t-set="sale_ids" t-value="object.transaction_ids.sale_order_ids.order_line.filtered(lambda tx: tx.product_template_id.recurring_invoice)"/>
+                            <!-- <span t-out='sale_ids'/> -->
+                            <table class="table table-borderless m-0">
                                 <tbody>
                                     <tr t-foreach="sale_ids" t-as="line" class="pb-2">
                                         <td class="ps-0 pe-0">
@@ -82,9 +82,9 @@
                                                     </td>
                                                     <td></td>
                                                     <td class="p-0 w-25">
-                                                        Technical Name: <span class="d-block fw-bold" t-field="line.product_template_id.technical_name"/><br></br>
-                                                        Information: <span class="d-block fw-bold" t-field="line.product_template_id.document_link"/><br></br>
-                                                        Clone URL: <span class="d-block fw-bold" t-field="line.product_template_id.clone_url"/><br></br>
+                                                        Technical Name: <span class="d-block fw-bold" t-field="line.product_id.technical_name"/><br></br>
+                                                        Information: <span class="d-block fw-bold" t-field="line.product_id.document_link"/><br></br>
+                                                        Clone URL: <span class="d-block fw-bold" t-field="line.product_id.clone_url"/><br></br>
                                                     </td>
                                                     <td></td>
                                                 </tr>
@@ -92,7 +92,7 @@
                                         </td>
                                     </tr>
                                 </tbody>
-                            </table> -->
+                            </table>
                         <!-- </t> -->
                         <!--end of order details in tabular format-->
                         <br /><br />
