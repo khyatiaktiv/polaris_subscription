@@ -89,6 +89,8 @@
                         <!--end of order details in tabular format-->
                         <br /><br />
                         <br /><br />
+                        Please verify the module provided in the attached zip file.
+                        <br></br>
                         Do not hesitate to contact us if you have any questions.
                         <t t-if="not is_html_empty(object.invoice_user_id.signature)">
                             <br /><br />

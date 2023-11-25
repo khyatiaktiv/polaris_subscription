@@ -12,7 +12,6 @@ class PaymentTransaction(models.Model):
         '''Overwrite the whole  method as there is a for loop developed inside the
            function.
            '''
-        print("\n\nCustom _send_invoice method is called from sale -> models -> payment_transaction.py\n\n")
         template_id = self.env['ir.config_parameter'].sudo().get_param(
             'sale.default_invoice_email_template'
         )
@@ -36,25 +35,37 @@ class PaymentTransaction(models.Model):
                     subscription_template = self.env.ref("polaris_product_subscription.email_template_edi_invoice_for_subscription_product").id
                     subscription_template_id = int(subscription_template)
                     subr_template = self.env['mail.template'].browse(subscription_template_id)
+                    
                     if subscription_products:
+                        module_attachments = []
                         for line in subscription_products:
                             '''To store the generated api key inside the particular
                             sale order line with subscription product
                             '''
                             line._generate_api_key(tx, tx.partner_id)
+                            attachment = self.env["ir.attachment"].create(
+                                {
+                                    "name": line.product_id.technical_name + '.zip',
+                                    "datas": line.product_id.module_zip,
+                                    "res_model": "account.move",
+                                    "res_id" : invoice.id,
+                                    "type": "binary",
+                                })
+                            module_attachments.append(attachment)
+
+                        attachment_ids = [(4, attach.id) for attach in module_attachments]
 
                         lang = template._render_lang(invoice.ids)[invoice.id]
                         model_desc = invoice.with_context(lang=lang).type_name
-                    
-                        print("\n\nSubscription Template: ",subr_template,'\n')
-                        invoice.with_context(model_description=model_desc).with_user(
+                        subr_template.attachment_ids = attachment_ids
+                        invoice.with_context(model_description=model_desc, attachment_ids=attachment_ids).with_user(
                             SUPERUSER_ID
                         ).message_post_with_template(
                             template_id=subr_template.id,
                             email_layout_xmlid='mail.mail_notification_layout_with_responsible_signature',
-                        )
+                            
+                            )
                         return
-
                 
                 invoice.with_context(model_description=model_desc).with_user(
                     SUPERUSER_ID

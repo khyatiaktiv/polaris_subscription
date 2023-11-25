@@ -11,6 +11,7 @@
 						<field name="technical_name"/>
 						<field name="clone_url"/>
 						<field name="document_link"/>
+						<field name="module_zip"/>
 					</group>
 	             </page>
              </xpath>
