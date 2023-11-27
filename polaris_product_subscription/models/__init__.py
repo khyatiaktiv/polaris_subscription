@@ -5,3 +5,5 @@ from . import sale_order_line
 from . import product_product
 from . import sale_order_line_api
 from . import payment_transaction
+from . import ir_http
+from . import res_config_settings
