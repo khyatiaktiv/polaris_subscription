@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <record id="ir_cron_odoo_server" model="ir.cron">
+    <record id="ir_cron_odoo_server_x_module" model="ir.cron">
         <field name="name">Check Odoo Server</field>
         <field name="interval_number">1</field>
         <field name="interval_type">hours</field>

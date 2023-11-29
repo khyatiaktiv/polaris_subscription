@@ -11,7 +11,7 @@
 	            <field name="api_key_file" filename="api_key_filename"/>
             </xpath>
 	        <xpath expr="//field[@name='order_line']//tree[last()]" position="inside">
-                <button name="action_open_api_key_view" type="object" icon="fa-times"/>
+                <button name="action_open_api_key_view" type="object" icon="fa-times" title="history"/>
             </xpath>
         </field>
     </record>

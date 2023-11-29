@@ -5,12 +5,15 @@
         <field name="model">sale.order.line.api.key</field>
         <field name="arch" type="xml">
             <tree create="1" delete="1" multi_edit="1" string="Subscribed Modules">
-                    <field name="customer_id"/>
-                    <field name="transaction_id"/>
-                    <field name="order_line_id"/>
-                    <field name="product_id"/>
-                    <field name="api_key"/>
-                    <field name="status"/>
+                <field name="customer_id"/>
+                <field name="transaction_id"/>
+                <field name="order_line_id"/>
+                <field name="product_id"/>
+	            <field name="technical_name"/>
+	            <field name="api_key"/>
+	            <field name="client_domain"/>
+                <field name="key_expiration_date"/>
+                <field name="status"/>
             </tree>
         </field>
     </record>
@@ -26,11 +29,18 @@
                 </header>
                 <sheet>
                     <group>
-                        <field name="customer_id"/>
-                        <field name="transaction_id"/>
-                        <field name="order_line_id"/>
-                        <field name="product_id"/>
-                        <field name="api_key"/>
+	                    <group>
+	                        <field name="customer_id"/>
+	                        <field name="transaction_id"/>
+	                        <field name="order_line_id"/>
+	                        <field name="product_id"/>
+	                        <field name="technical_name"/>
+	                    </group>
+                       <group>
+	                        <field name="api_key"/>
+	                        <field name="client_domain"/>
+	                        <field name="key_expiration_date"/>
+	                    </group>
                     </group>
                 </sheet>
             </form>

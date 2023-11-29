@@ -4,7 +4,7 @@ from odoo import models, fields
 
 
 class ProductProduct(models.Model):
-    _inherit = 'product.product'
+    _inherit = "product.product"
 
     clone_url = fields.Char("Clone URL")
     document_link = fields.Char("Document Link")
@@ -13,9 +13,8 @@ class ProductProduct(models.Model):
 
 
 class ProductProduct(models.Model):
-    _inherit = 'product.template'
+    _inherit = "product.template"
 
     clone_url = fields.Char("Clone URL")
     document_link = fields.Char("Document Link")
     technical_name = fields.Char("Technical Module Name")
-    
