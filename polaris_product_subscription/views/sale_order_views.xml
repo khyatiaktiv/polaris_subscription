@@ -7,11 +7,9 @@
         <field name="arch" type="xml">
             <xpath expr="//field[@name='order_line']/tree/field[@name='company_id']" position="after">
                 <field name="api_key"/>
-	            <field name="api_key_filename" invisible="1"/>
-	            <field name="api_key_file" filename="api_key_filename"/>
             </xpath>
 	        <xpath expr="//field[@name='order_line']//tree[last()]" position="inside">
-                <button name="action_open_api_key_view" type="object" icon="fa-times" title="history"/>
+                <button name="action_open_api_key_view" type="object" icon="fa-times" title="history" string="History"/>
             </xpath>
         </field>
     </record>

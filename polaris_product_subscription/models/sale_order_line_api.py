@@ -7,14 +7,13 @@ class SaleOrderLineApiKey(models.Model):
     _description = "Sale Order Line API Key"
     _rec_name = "technical_name"
 
-    customer_id = fields.Many2one("res.partner", string="Partner")
-    order_line_id = fields.Many2one("sale.order.line", string="SO Line")
+    customer_id = fields.Many2one("res.partner", string="Customer")
+    order_line_id = fields.Many2one("sale.order.line", string="Order Line")
     product_id = fields.Many2one("product.product", string="Product")
     technical_name = fields.Char(related="product_id.technical_name")
     api_key = fields.Char(string="API Key")
     status = fields.Selection(
         [
-            ("draft", "Draft"),
             ("start", "Start"),
             ("inprogress", "In Progress"),
             ("stop", "Stop"),

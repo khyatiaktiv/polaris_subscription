@@ -3,19 +3,15 @@
 	<record id="res_config_settings_view_form" model="ir.ui.view">
 		<field name="name">res.config.settings.view.form.inherit</field>
 		<field name="model">res.config.settings</field>
-		<field name="priority" eval="0"/>
+		<field name="priority" eval="100"/>
 		<field name="inherit_id" ref="base.res_config_settings_view_form"/>
 		<field name="arch" type="xml">
 			<xpath expr="//div[@name='integration']" position="inside">
-				<div class="col-12 col-lg-6 o_setting_box" id="x_module_setting">
+				<div class="col-12 col-lg-6 o_setting_box" id="polaris_custom_module_code_setting">
 					<div class="content-group">
-						<div class="mt16 row">
-							<label for="x_module_expiration_date" class="col-4 o_light_label"/>
-							<field name="x_module_expiration_date"/>
-						</div>
-						<div class="mt16 row">
-							<label for="x_module_api_key" class="col-4 o_light_label"/>
-							<field name="x_module_api_key"/>
+						<div class="mt16">
+							<label for="polaris_custom_module_code_api_key" class="me-4"/>
+							<field name="polaris_custom_module_code_api_key"/>
 						</div>
 					</div>
 				</div>

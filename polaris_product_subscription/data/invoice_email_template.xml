@@ -44,48 +44,40 @@
                         </t>
                         <br></br>
                         <br></br>
-
                         <!--start of order details tabular format-->
-                        <t style="margin: 0px; padding: 0px;">
+	                    <t t-set="sale_ids" t-value="object.transaction_ids.sale_order_ids.order_line.filtered(lambda tx: tx.product_template_id.recurring_invoice)"/>
+	                    <t style="margin: 0px; padding: 0px;" t-if="sale_ids">
                             <table width="100%" style="color: #454748; font-size: 12px; border-collapse: collapse;">
-                                <tr style="border-bottom: 2px solid #dee2e6;">
-                                    <td width="15%" align="center"><span style="font-weight:bold;">Products</span></td>
-                                    <td></td>
-                                    <td width="8%" align="center"><span style="font-weight:bold;">Quantity</span></td>
-                                    <td></td>
-                                    <td width="15%" align="center"><span style="font-weight:bold;">API Details</span></td>
-                                    <td></td>
-                                    <td width="15%" align="center"><span style="font-weight:bold;">Document Link</span></td>
-                                    <td></td>
-                                </tr>
+	                            <thead>
+	                                <tr style="border-bottom: 2px solid #dee2e6;">
+	                                    <td><span style="font-weight:bold;">Products</span></td>
+	                                    <td></td>
+	                                    <td><span style="font-weight:bold;">Quantity</span></td>
+	                                    <td></td>
+	                                    <td><span style="font-weight:bold;">Document Link</span></td>
+	                                    <td></td>
+	                                </tr>
+	                            </thead>
+	                            <tbody>
+	                                <tr t-foreach="sale_ids" t-as="line" style="border-bottom: 2px solid #dee2e6;">
+	                                    <td>
+	                                        <span style="font-weight:bold;" t-field="line.product_template_id.name"/>
+	                                    </td>
+	                                    <td></td>
+	                                    <td>
+	                                        <span class="d-block fw-bold" t-field="line.product_uom_qty"/>
+	                                    </td>
+	                                    <td></td>
+	                                    <td>
+	                                        <br></br>
+		                                    <span style="font-weight:bold;">Clone URL: </span><span class="d-block fw-bold" t-field="line.product_id.clone_url"/><br></br>
+		                                    <span style="font-weight:bold;">Information: </span><span class="d-block fw-bold" t-field="line.product_id.document_link"/><br></br>
+	                                    </td>
+	                                    <td></td>
+	                                </tr>
+	                            </tbody>
                             </table>
                         </t>
-                        <t t-set="sale_ids" t-value="object.transaction_ids.sale_order_ids.order_line.filtered(lambda tx: tx.product_template_id.recurring_invoice)"/>
-                        <table width="100%" style="color: #454748; font-size: 12px; border-collapse: collapse;">
-                            <tbody>
-                                <tr t-foreach="sale_ids" t-as="line" style="border-bottom: 2px solid #dee2e6;">
-                                    <td width="15%" align="center">
-                                        <span style="font-weight:bold;" t-field="line.product_template_id.name"/>
-                                    </td>
-                                    <td></td>
-                                    <td width="8%" align="center">
-                                        <span class="d-block fw-bold" t-field="line.product_uom_qty"/>
-                                    </td>
-                                    <td></td>
-                                    <td width="15%" align="center">
-                                        <span class="d-block fw-bold" t-field="line.api_key"/>
-                                    </td>
-                                    <td></td>
-                                    <td width="15%" align="left">
-                                        <br></br>
-                                        <span style="font-weight:bold;" >Technical Name: </span><span class="d-block fw-bold" t-field="line.product_id.technical_name"/><br></br>
-                                        <span style="font-weight:bold;">Information: </span><span class="d-block fw-bold" t-field="line.product_id.document_link"/><br></br>
-                                        <span style="font-weight:bold;">Clone URL: </span><span class="d-block fw-bold" t-field="line.product_id.clone_url"/><br></br>
-                                    </td>
-                                    <td></td>
-                                </tr>
-                            </tbody>
-                        </table>
                         <!--end of order details in tabular format-->
                         <br /><br />
                         <br /><br />
