@@ -65,6 +65,7 @@ class PaymentTransaction(models.Model):
                     ]
                     lang = sub_template._render_lang(invoice.ids)[invoice.id]
                     model_desc_sub = invoice.with_context(lang=lang).type_name
+                    sub_template.attachment_ids = attachment_ids
                     # attachments not being added
                     invoice.with_context(
                         model_description=model_desc_sub,
@@ -73,6 +74,7 @@ class PaymentTransaction(models.Model):
                         template_id=sub_template_id,
                         email_layout_xmlid="mail.mail_notification_layout_with_responsible_signature",
                     )
+                    sub_template.attachment_ids = False
                 else:
                     lang = template._render_lang(invoice.ids)[invoice.id]
                     model_desc = invoice.with_context(lang=lang).type_name
