@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="stock_res_config_settings_view_form_inherit" model="ir.ui.view">
+            <field name="name">res.config.settings.view.form.inherit.stock</field>
+            <field name="model">res.config.settings</field>
+            <field name="priority" eval="30"/>
+            <field name="inherit_id" ref="stock.res_config_settings_view_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='group_stock_adv_location']/parent::div/parent::div" position="after">
+                    <div class="col-xs-12 col-md-12 o_setting_box">
+                         <div class="col-xs-12 col-md-6 o_setting_box left">
+                            <div class="o_setting_left_pane" invisible="1">
+                                <div>
+                                    <b><label for="internal_transfer_kanban_id"/></b>
+                                </div>
+                                <field name="internal_transfer_kanban_id" options="{'no_open': True, 'no_create': True}" domain='[("code","=","internal")]'/>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-md-6 o_setting_box">
+                            <div class="o_setting_right_pane">
+                                <div>
+                                    <b><label for="internal_transfer_kanban_id"/></b>
+                                </div>
+                                <field name="internal_transfer_kanban_id" options="{'no_open': True, 'no_create': True}" domain='[("code","=","internal")]'/>
+                            </div>
+                        </div>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+
+
+        <record id="polaris_customer_res_config_settings_view_form" model="ir.ui.view">
+            <field name="name">res.config.settings.view.form.inherit.polaris_customer</field>
+            <field name="model">res.config.settings</field>
+            <field name="inherit_id" ref="base_setup.res_config_settings_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//widget[@name='res_config_dev_tool']" position="before">
+                    <h2>Validate App Subscription</h2>
+                    <div class="row mt16 o_settings_container" name="about_validate_api_subscription">
+                        <div class='col-12 col-lg-6 o_setting_box' id='validate_app_subscription'>
+                            <div class="o_setting_right_pane" id="polaris_custom_module_code_setting">
+                                <div class="content-group">
+                                    <label for="polaris_custom_module_code_api_key" class="me-4"/>
+                                    <field name="polaris_custom_module_code_api_key"/>
+                                    <button type="object" name="validate_api_details" string="Validate API Key" icon="fa-arrow-right" class="btn-link"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>
