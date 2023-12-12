@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<template id="report_subscription_history_document">
+	    <t t-call="web.external_layout">
+	        <t t-set="doc" t-value="doc.with_context(lang=doc.customer_id.lang)"/>
+	        <div class="page">
+	            <div class="oe_structure"/>
+	            <h2 class="mt-4">
+	                <span>Subscription Details</span>
+	            </h2>
+	            <p>
+	            	Hello <span t-field='doc.customer_id.name'/>,
+	            	<br></br>
+	            	Please find your Subscription Details
+	            </p>
+
+	            <div class="oe_structure"></div>
+	            <table class="table table-sm o_main_table mt-4">
+	                <thead style="display: table-row-group">
+	                    <tr>
+	                        <th name="th_customer" class="text-start">Customer</th>
+	                        <th name="th_pmt_trn" class="text-start">Payment Transaction</th>
+	                        <th name="th_product" class="text-start">Product</th>
+	                        <th name="th_technical_details" class="text-start">Technical Module</th>
+	                        <th name="th_api_details" class="text-start">API Key</th>
+	                        <th name="th_key_expr" class="text-start">Expiration Date</th>
+	                    </tr>
+	                </thead>
+	                <tbody class="sale_tbody">
+	                	<tr>
+	                        <td name="th_customer" class="text-start">
+	                        	<span t-field="doc.customer_id.name"/>
+	                        </td>
+	                        <td name="th_pmt_trn" class="text-start">
+	                        	<span t-field="doc.transaction_id.reference"/>
+	                        </td>
+	                        <td name="th_product" class="text-start">
+	                        	<span t-field="doc.product_id.display_name"/>
+	                        </td>
+	                        <td name="th_technical_details" class="text-start">
+	                        	<span t-field="doc.technical_name"/>
+	                        </td>
+	                        <td name="th_api_details" class="text-start">
+	                        	<span t-field="doc.api_key"/>
+	                        </td>
+	                        <td name="th_key_expr" class="text-start">
+	                        	<span t-field="doc.key_expiration_date"/>
+	                        </td>
+	                    </tr>
+	                </tbody>
+				</table>
+				<br></br>
+				<p>
+	            	<span>Thanks for contacting us.</span>
+	            </p>
+	        </div>
+	    </t>
+	</template>
+
+	<template id="report_subscription_history_raw">
+	    <t t-call="web.html_container">
+	        <t t-foreach="docs" t-as="doc">
+	            <t t-call="polaris_product_subscription.report_subscription_history_document" t-lang="doc.customer_id.lang"/>
+	        </t>
+	    </t>
+	</template>
+
+	<template id="report_sale_order_line_api_key">
+	    <t t-call="polaris_product_subscription.report_subscription_history_raw"/>
+	</template>
+
+	<record id="action_report_subscription_history" model="ir.actions.report">
+        <field name="name">API Details</field>
+        <field name="model">sale.order.line.api.key</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">polaris_product_subscription.report_sale_order_line_api_key</field>
+        <field name="report_file">polaris_product_subscription.report_sale_order_line_api_key</field>
+        <field name="print_report_name">(object.product_id.name)</field>
+        <field name="binding_model_id" ref="model_sale_order_line_api_key"/>
+        <field name="binding_type">report</field>
+    </record>
+
+</odoo>

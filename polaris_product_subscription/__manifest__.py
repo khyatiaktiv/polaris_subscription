@@ -18,6 +18,8 @@
         "views/sale_order_views.xml",
         "views/product_views.xml",
         "views/sale_order_api_key_history.xml",
+        "views/subscription_portal_templates.xml",
+        "report/subscription_api_report.xml"
     ],
     "application": True,
     "auto_install": False,

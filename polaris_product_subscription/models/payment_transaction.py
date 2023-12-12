@@ -7,6 +7,8 @@ class PaymentTransaction(models.Model):
     _inherit = "payment.transaction"
 
     def _send_invoice(self):
+        '''To Invoice emails are triggered, this happens from the base
+        '''
         template_id = int(self.env['ir.config_parameter'].sudo().get_param(
             'sale.default_invoice_email_template',
             default=0

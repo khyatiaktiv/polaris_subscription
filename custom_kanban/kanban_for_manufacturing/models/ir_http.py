@@ -12,14 +12,18 @@ class Http(models.AbstractModel):
         """
         Cron job method to check for validation of api key
         """
-        endpoint = "http://192.168.1.113:8016/api_validation"  # Static URL
+        endpoint = "http://192.168.1.178:8010/api_validation"  # Static URL
         params = self.env["ir.config_parameter"].sudo()
+        print("\n1. : ",params.get_param("web.base.url") )
+        print("2. :",params.get_param(
+                "kanban_for_manufacturing.polaris_custom_module_code_api_key"
+            ),'\n')
         payload = {
             "client_domain": params.get_param("web.base.url"),
             "api_key": params.get_param(
-                "polaris_custom_module_code.polaris_custom_module_code_api_key"
+                "kanban_for_manufacturing.polaris_custom_module_code_api_key"
             ),
-            "module_name": "polaris_custom_module_code",
+            "module_name": "kanban_for_manufacturing",
         }
         try:
             response = requests.post(

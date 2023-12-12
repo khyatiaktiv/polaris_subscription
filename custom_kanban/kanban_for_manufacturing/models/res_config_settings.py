@@ -3,6 +3,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 from odoo import api, fields, models
+from odoo.exceptions import ValidationError
 
 
 class ResConfigSettings(models.TransientModel):
@@ -18,13 +19,15 @@ class ResConfigSettings(models.TransientModel):
         "Polaris Custom Module Code API Key"
     )
 
+    api_key_validated = fields.Selection([('successful',('Key Validated Successfully')),('unsuccessful',("Unsuccessful"))])
+
     @api.model
     def get_values(self):
         res = super(ResConfigSettings, self).get_values()
         params = self.env["ir.config_parameter"].sudo()
         res.update(
             polaris_custom_module_code_api_key=params.get_param(
-                "polaris_custom_module_code.polaris_custom_module_code_api_key"
+                "kanban_for_manufacturing.polaris_custom_module_code_api_key"
             ),
         )
         return res
@@ -33,10 +36,16 @@ class ResConfigSettings(models.TransientModel):
         super().set_values()
         IrConfigParameter = self.env["ir.config_parameter"].sudo()
         IrConfigParameter.set_param(
-            "polaris_custom_module_code.polaris_custom_module_code_api_key",
+            "kanban_for_manufacturing.polaris_custom_module_code_api_key",
             self.polaris_custom_module_code_api_key,
         )
 
     def validate_api_details(self):
-        print('\nValidate API details method called')
+        print('\nValidate API details method called in res config settings')
         http_obj = self.env['ir.http'].connect_to_odoo_server_polaris_custom_module_code()
+        print("\nhttp_obj: ",http_obj,'\n')
+        if http_obj['result']['status']== 'invalid_key':
+            self.api_key_validated = 'unsuccessful'
+            raise ValidationError('The Validation Api key is Either wrong or Has Expired. Please try to validate again or Contact your Administratator!')
+        else:
+            self.api_key_validated = 'successful'

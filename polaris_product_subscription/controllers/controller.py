@@ -9,8 +9,10 @@ from odoo.http import request
 class OdooAPIController(http.Controller):
     @http.route("/api_validation", type="json", auth="public")
     def api_validation(self, **kw):
+        print("\nApi Validation method called!!!!!")
         # Access the request parameters
         data = json.loads(http.request.httprequest.data)
+        print("\nData: ",data,'\n')
         # Process the API request and return the response
         valid_api_key = request.env["sale.order.line.api.key"].search(
             [
@@ -18,6 +20,7 @@ class OdooAPIController(http.Controller):
                 ("technical_name", "=", data["module_name"]),
             ]
         )
+        print("\nvalidate api key: ",valid_api_key,'\n')
         if valid_api_key:
             if valid_api_key.status == "start":
                 valid_api_key.status = "inprogress"
@@ -39,3 +42,5 @@ class OdooAPIController(http.Controller):
                 }
         else:
             return {"status": "invalid_key", "message": "Invalid Api Key"}
+
+    

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<template id="subscription_portal_template_inherit" inherit_id="sale_subscription.subscription_portal_sidebar">
+		<xpath expr="//div[hasclass('o_download_pdf')]" position="after">
+			<!-- Send Subscription Details -->
+			<div class="btn-toolbar flex-sm-nowrap mt8">
+                <div class="btn-group flex-grow-1 me-1">
+                    <a class="btn btn-secondary btn-block" title="Resend API Information" t-attf-href="/my/subscriptions/{{sale_order.id}}/resend_email_api_info"
+                    >Resend API Key</a>
+                </div>
+                <div class="btn-group flex-grow-1">
+                    <a class="btn btn-secondary btn-block" id="cancel_subscription" t-attf-href="/my/subscriptions/{{sale_order.id}}/cancel_subscription" title="Cancel" target="_blank"> Cancel</a>
+                </div>
+            </div>
+		</xpath>
+	</template>
+</odoo>
