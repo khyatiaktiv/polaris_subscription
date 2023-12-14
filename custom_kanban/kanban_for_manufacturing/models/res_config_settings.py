@@ -19,7 +19,10 @@ class ResConfigSettings(models.TransientModel):
         "Polaris Custom Module Code API Key"
     )
 
-    api_key_validated = fields.Selection([('successful',('Key Validated Successfully')),('unsuccessful',("Unsuccessful"))])
+    api_key_validated = fields.Selection([
+                                        ('successful','Key Validated Successfully'),
+                                        ('unsuccessful',"Unsuccessful")],
+                                        default=lambda self: self.env['ir.config_parameter'].get_param('api_key_validated'))
 
     @api.model
     def get_values(self):
@@ -37,8 +40,9 @@ class ResConfigSettings(models.TransientModel):
         IrConfigParameter = self.env["ir.config_parameter"].sudo()
         IrConfigParameter.set_param(
             "kanban_for_manufacturing.polaris_custom_module_code_api_key",
-            self.polaris_custom_module_code_api_key,
-        )
+            self.polaris_custom_module_code_api_key)
+        IrConfigParameter.set_param("kanban_for_manufacturing.api_key_validated", self.api_key_validated)
+
 
     def validate_api_details(self):
         print('\nValidate API details method called in res config settings')
@@ -49,3 +53,15 @@ class ResConfigSettings(models.TransientModel):
             raise ValidationError('The Validation Api key is Either wrong or Has Expired. Please try to validate again or Contact your Administratator!')
         else:
             self.api_key_validated = 'successful'
+            return {
+            "type": "ir.actions.client",
+            "tag": "display_notification",
+            "params": {
+                "type": 'success',
+                "title": 'Connection Successful',
+                "message": 'API Validated Succesful',
+                "sticky": False,
+                "next": {"type": "ir.actions.act_window_close"},
+            }
+            }
+

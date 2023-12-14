@@ -45,6 +45,7 @@
                                 <div class="content-group">
                                     <label for="polaris_custom_module_code_api_key" class="me-4"/>
                                     <field name="polaris_custom_module_code_api_key"/>
+                                    <field name="api_key_validated" invisible="1"/>
                                     <button type="object" name="validate_api_details" string="Validate API Key" icon="fa-arrow-right" class="btn-link"/>
                                 </div>
                                 <span>
