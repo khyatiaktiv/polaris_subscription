@@ -9,7 +9,7 @@
                     >Resend API Key</a>
                 </div>
                 <div class="btn-group flex-grow-1">
-                    <a class="btn btn-secondary btn-block" id="cancel_subscription" t-attf-href="/my/subscriptions/{{sale_order.id}}/cancel_subscription" title="Cancel" target="_blank"> Cancel</a>
+                    <a class="btn btn-secondary btn-block" id="cancel_subscription" t-attf-href="/my/subscription/{{sale_order.id}}/cancel_subscription" title="Cancel" target="_blank"> Cancel</a>
                 </div>
             </div>
 		</xpath>

@@ -9,6 +9,7 @@ class SaleOrderLineApiKey(models.Model):
 
     customer_id = fields.Many2one("res.partner", string="Customer")
     order_line_id = fields.Many2one("sale.order.line", string="Order Line")
+    order_id = fields.Many2one("sale.order",related='order_line_id.order_id')
     product_id = fields.Many2one("product.product", string="Product")
     technical_name = fields.Char(related="product_id.technical_name")
     api_key = fields.Char(string="API Key")

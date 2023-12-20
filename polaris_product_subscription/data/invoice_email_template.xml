@@ -103,7 +103,7 @@
             <field name="model_id" ref="polaris_product_subscription.model_sale_order_line_api_key"/>
             <field name="email_from">{{ (user.email_formatted) }}</field>
             <field name="partner_to">{{ object.customer_id.id }}</field>
-            <field name="subject">{{ object.company_id.name }} Invoice (Ref {{ object.name or 'n/a' }})</field>
+            <field name="subject">Details to the Subscription for Ref {{object.order_id.name}} | {{object.technical_name}}</field>
             <field name="description">Sent to customers when they require their Subscription Details</field>
             <field name="body_html" type="html">
                 <div style="margin: 0px; padding: 0px;">
@@ -116,10 +116,6 @@
                         Attached herewith is the information pertaining to your subscription.
                         <br></br>
                         Do not hesitate to contact us if you have any questions.
-                        <t t-if="not is_html_empty(object.customer_id.signature)">
-                            <br /><br />
-                            <t t-out="object.customer_id.signature or ''">--<br/></t>
-                        </t>
                     </p>
                 </div>
             </field>

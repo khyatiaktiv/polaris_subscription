@@ -7,6 +7,9 @@ from odoo.addons.sale_subscription.controllers import portal as subscription_por
 
 class SubscriptionPortal(subscription_portal.PaymentPortal):
 
+    # def display_success_notification(self):
+   
+
     @http.route(['/my/subscriptions/<int:order_id>/resend_email_api_info'], type='http', auth="public")
     def subscription_resend_email_api_info(self, order_id, access_token=None, change_plan=False, **kw):
         print('\nsubscription_resend_email_api_info method called!!!!\n\n')
@@ -14,60 +17,29 @@ class SubscriptionPortal(subscription_portal.PaymentPortal):
         print("\nOrder_sudo111 : ", order_sudo,'\n')
         if redirection:
             return redirection
+        
+        subr_history_object = request.env['sale.order.line.api.key']
+        history_lines = subr_history_object.search([('order_id','in',order_sudo.ids)])
+        print('\nHistory_lines: ',history_lines,'\n')
 
-        lang = request.env.context.get('lang')
-        mail_template = request.env.ref('polaris_product_subscription.email_template_on_resend_api_details')
-        print('\nMail Template')
-        # if mail_template and mail_template.lang:
-        #     lang = mail_template._render_lang(self.ids)[self.id]
-        ctx = {
-            'model': 'sale.order.line.api.key',
-            'res_ids': order_sudo.ids,
-            'template_id': mail_template.id if mail_template else None,
-            'composition_mode': 'comment',
-            'email_layout_xmlid': 'mail.mail_notification_layout_with_responsible_signature',
-        }
+        for rec in history_lines:
+            print("\nHistory record: ",rec,'\n')
+            lang = request.env.context.get('lang')
+            mail_template = request.env.ref('polaris_product_subscription.email_template_on_resend_api_details')
+            print('\nMail Template: ',mail_template,'\n')
 
-        request.env['mail.compose.message'].with_context(
-            default_email_layout_xmlid='mail.mail_notification_layout_with_responsible_signature',
-        ).create(ctx)._action_send_mail()
-
-
-
-
-
-
-
-
-
-
-
-        return {
-            'type': 'ir.actions.act_window',
-            'view_mode': 'form',
-            'res_model': 'mail.compose.message',
-            'views': [(False, 'form')],
-            'view_id': False,
-            'target': 'new',
-            'context': ctx,
-        }
-
-
-
-
-
-
-
-
-
-        # qs = ""
-        # if change_plan:
-        #     qs = "&change_plan=true"
-        # if order_sudo.user_extend:
-        #     renewal = order_sudo._create_renew_upsell_order('2_renewal', _('A renewal has been created by the client.'))
-        #     renewal.action_quotation_sent()
-        #     return request.redirect(renewal.get_portal_url(query_string=qs))
-
+            ctx = {
+                'email_layout_xmlid': "mail.mail_notification_light",
+                'model': 'sale.order.line.api.key',
+                'res_id': rec.id,
+                'email_to': rec.customer_id and rec.customer_id.email or False,
+            }
+            try:
+                mail_template.send_mail(rec.id, force_send=True,
+                        raise_exception=True, email_values=ctx)
+                return request.redirect(order_sudo.get_portal_url())
+            except (UserError, ValidationError):
+                raise UserError('Somehow Mail was not sent,Please try again later')
 
     @http.route(['/my/subscriptions/<int:order_id>/cancel_subscription'], type='http', auth="public")
     def cancel_subscription(self, order_id, access_token=None, change_plan=False, **kw):
@@ -76,10 +48,4 @@ class SubscriptionPortal(subscription_portal.PaymentPortal):
         print("\norder sudo222: ",order_sudo,'\n')
         if redirection:
             return redirection
-        # qs = ""
-        # if change_plan:
-        #     qs = "&change_plan=true"
-        # if order_sudo.user_extend:
-        #     renewal = order_sudo._create_renew_upsell_order('2_renewal', _('A renewal has been created by the client.'))
-        #     renewal.action_quotation_sent()
-        #     re
+        
