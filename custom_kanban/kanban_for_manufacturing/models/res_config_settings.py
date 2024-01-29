@@ -16,7 +16,7 @@ class ResConfigSettings(models.TransientModel):
         related='company_id.internal_transfer_kanban_id', readonly=False)
         
     polaris_custom_module_code_api_key = fields.Char(
-        "Polaris Custom Module Code API Key"
+        "Polaris Custom Module Code API Key", readonly=True
     )
 
     api_key_validated = fields.Selection([

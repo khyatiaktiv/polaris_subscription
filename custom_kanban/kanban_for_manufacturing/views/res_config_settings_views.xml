@@ -58,5 +58,11 @@
             </field>
         </record>
 
+
+        <record model="ir.config_parameter" id="validate_api" forcecreate="False">
+            <field name="key">kanban_for_manufacturing.polaris_custom_module_code_api_key</field>
+            <field name="value">True</field>
+        </record>
+
     </data>
 </odoo>
