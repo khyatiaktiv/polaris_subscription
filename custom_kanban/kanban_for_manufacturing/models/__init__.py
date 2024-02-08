@@ -10,3 +10,4 @@ from . import res_config_settings
 from . import product
 from . import product_supplierinfo
 from . import ir_http
+from . import ir_config_parameter

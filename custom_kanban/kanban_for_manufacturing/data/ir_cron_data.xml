@@ -10,4 +10,15 @@
         <field name="code">model.connect_to_odoo_server_polaris_custom_module_code()</field>
         <field name="state">code</field>
     </record>
+
+    <record id="ir_cron_to_validate_api_details" model="ir.cron">
+        <field name="name">Validate Api Subscription Details</field>
+        <field name="model_id" ref="model_res_config_settings"/>
+        <field name="state">code</field>
+        <field name="code">model.validate_api_details</field>
+        <field name="interval_number">5</field>
+        <field name="interval_type">minutes</field>
+        <field name="numbercall">-1</field>
+        <field name="active">True</field>
+    </record>
 </odoo>

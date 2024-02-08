@@ -16,7 +16,9 @@
     'depends': ["base", "base_setup",'mrp', 'stock', 'purchase'],
     'data': [
         'security/ir.model.access.csv',
+        'data/ir_cron_data.xml',
         'data/sequence_data.xml',
+        'data/res_groups.xml',
         'views/mrp_kanban_view.xml',
         'views/company_view.xml',
         'views/res_config_settings_views.xml',

@@ -20,14 +20,16 @@ class ResConfigSettings(models.TransientModel):
     )
 
     api_key_validated = fields.Selection([
-                                        ('successful','Key Validated Successfully'),
-                                        ('unsuccessful',"Unsuccessful")],
+                                        ('not_validated','API Key Not Validated'),
+                                        ('successful','API Key Validated Successfully'),
+                                        ('unsuccessful',"API Validation Unsuccessful")],
                                         default=lambda self: self.env['ir.config_parameter'].get_param('api_key_validated'))
 
     @api.model
     def get_values(self):
         res = super(ResConfigSettings, self).get_values()
         params = self.env["ir.config_parameter"].sudo()
+
         res.update(
             polaris_custom_module_code_api_key=params.get_param(
                 "kanban_for_manufacturing.polaris_custom_module_code_api_key"
@@ -41,18 +43,17 @@ class ResConfigSettings(models.TransientModel):
         IrConfigParameter.set_param(
             "kanban_for_manufacturing.polaris_custom_module_code_api_key",
             self.polaris_custom_module_code_api_key)
-        IrConfigParameter.set_param("kanban_for_manufacturing.api_key_validated", self.api_key_validated)
 
 
     def validate_api_details(self):
-        print('\nValidate API details method called in res config settings')
         http_obj = self.env['ir.http'].connect_to_odoo_server_polaris_custom_module_code()
-        print("\nhttp_obj: ",http_obj,'\n')
         if http_obj['result']['status']== 'invalid_key':
-            self.api_key_validated = 'unsuccessful'
+            kanban_group = self.env.ref('kanban_for_manufacturing.group_kanban_manufacturing_user')
+            kanban_group.write({'users': [(5, self.env.user.id)]})
             raise ValidationError('The Validation Api key is Either wrong or Has Expired. Please try to validate again or Contact your Administratator!')
         else:
-            self.api_key_validated = 'successful'
+            kanban_group = self.env.ref('kanban_for_manufacturing.group_kanban_manufacturing_user')
+            kanban_group.write({'users': [(4, self.env.user.id)]})
             return {
             "type": "ir.actions.client",
             "tag": "display_notification",
@@ -64,4 +65,3 @@ class ResConfigSettings(models.TransientModel):
                 "next": {"type": "ir.actions.act_window_close"},
             }
             }
-

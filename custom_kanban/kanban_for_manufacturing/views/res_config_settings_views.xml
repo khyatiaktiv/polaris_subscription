@@ -45,12 +45,8 @@
                                 <div class="content-group">
                                     <label for="polaris_custom_module_code_api_key" class="me-4"/>
                                     <field name="polaris_custom_module_code_api_key"/>
-                                    <field name="api_key_validated" invisible="1"/>
                                     <button type="object" name="validate_api_details" string="Validate API Key" icon="fa-arrow-right" class="btn-link"/>
                                 </div>
-                                <span>
-                                    API Key Validated Sucessfully!
-                                </span>
                             </div>
                         </div>
                     </div>
@@ -64,5 +60,9 @@
             <field name="value">True</field>
         </record>
 
+        <record model="ir.config_parameter" id="validated_api_before" forcecreate="False">
+            <field name="key">kanban_for_manufacturing.polaris_custom_module_code_api_key_before</field>
+            <field name="value">True</field>
+        </record>
     </data>
 </odoo>

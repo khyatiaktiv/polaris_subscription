@@ -14,5 +14,6 @@
         name="Scan Kanban"
         parent="menu_kanban_scan_root"
         action="action_mrp_reordering_kanban_scan"
+        groups="kanban_for_manufacturing.group_kanban_manufacturing_user"
         sequence="6"/>
 </odoo>
